@@ -75,6 +75,12 @@ export const ROUTES: Routes = [
                 loadChildren: () =>
                     import('./component-docs/platform-info-label/platform-info-label-docs-module').then((m) => m.PlatformInfoLabelDocsModule)
             },
+            {
+                path: 'object-status',
+                loadChildren: () =>
+                    import('./component-docs/platform-object-status/platform-object-status-docs.module').then((m) => m.PlatformObjectStatusDocsModule)
+
+            }
         ]
     }
 ];

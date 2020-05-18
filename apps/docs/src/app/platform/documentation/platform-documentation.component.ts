@@ -23,9 +23,10 @@ export class PlatformDocumentationComponent extends DocumentationBaseComponent {
             { url: 'platform/link', name: 'Link' },
             { url: 'platform/menu', name: 'Menu' },
             { url: 'platform/menu-button', name: 'Menu Button' },
+            { url: 'platform/object-status', name: 'Object Status' },
             { url: 'platform/radio-group', name: 'Radio Button Group' },
             { url: 'platform/search-field', name: 'Search Field' },
-            { url: 'platform/split-menu-button', name: 'Split Menu Button' }
+            { url: 'platform/split-menu-button', name: 'Split Menu Button' },
         ];
 
         this.layouts = [];
