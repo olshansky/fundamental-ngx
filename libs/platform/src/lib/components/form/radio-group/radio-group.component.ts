@@ -10,7 +10,8 @@ import {
     Output,
     Self,
     Optional,
-    ViewChildren
+    ViewChildren,
+    ViewEncapsulation
 } from '@angular/core';
 import { NgControl, NgForm } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
@@ -24,7 +25,8 @@ let nextUniqueId = 0;
 @Component({
     selector: 'fdp-radio-group',
     templateUrl: './radio-group.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None
 })
 export class RadioGroupComponent extends CollectionBaseInput implements AfterViewInit {
     /** value of selected radio button */
@@ -84,13 +86,13 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
      * @hidden selecting default button as provided as input
      */
     ngAfterContentChecked(): void {
-        if (!this.validateRadioButtons()) {
+        if (!this._validateRadioButtons()) {
             throw new Error('fdp-radio-button-group must contain a fdp-radio-button');
         }
 
         if (this.contentRadioButtons && this.contentRadioButtons.length > 0) {
             this.contentRadioButtons.forEach((button) => {
-                this.selectUnselect(button);
+                this._selectUnselect(button);
                 this._changeDetector.detectChanges();
             });
         }
@@ -100,7 +102,7 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
      * Initialize properties once fd-radio-buttons are available.
      * This allows us to propagate relevant attributes to associated buttons.
      */
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         setTimeout(() => {
             this._initContentRadioButtons();
             this._initViewRadioButtons();
@@ -110,7 +112,7 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
     /**
      * Make sure we have expected childs.
      */
-    private validateRadioButtons(): boolean {
+    private _validateRadioButtons(): boolean {
         return (
             this.contentRadioButtons.filter((item) => !(item instanceof RadioButtonComponent || item['renderer']))
                 .length === 0
@@ -120,11 +122,11 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
     /**
      * select radio button with provided value
      */
-    private _initViewRadioButtons() {
+    private _initViewRadioButtons(): void {
         if (this.viewRadioButtons && this.viewRadioButtons.length > 0) {
             this.viewRadioButtons.forEach((button) => {
                 button.status = this.status;
-                this.selectUnselect(button);
+                this._selectUnselect(button);
                 this.onChange(this._value);
             });
         }
@@ -134,11 +136,11 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
      * Initializing all content radio buttons with given properties and
      * subscribing to radio button radiobuttonclicked event
      */
-    private _initContentRadioButtons() {
+    private _initContentRadioButtons(): void {
         if (this.contentRadioButtons && this.contentRadioButtons.length > 0) {
             this.contentRadioButtons.forEach((button) => {
                 this._setProperties(button);
-                this.selectUnselect(button);
+                this._selectUnselect(button);
                 this.onChange(this._value);
                 button.click.pipe(takeUntil(this.destroy$)).subscribe((ev) => this._selectedValueChanged(ev));
             });
@@ -149,7 +151,7 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
      * selects given button, if value matches
      * @param button
      */
-    private selectUnselect(button: RadioButtonComponent) {
+    private _selectUnselect(button: RadioButtonComponent): void {
         if (!this._value) {
             button.unselect();
         } else {
@@ -169,7 +171,7 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
      *
      * @param button set inital values, used while content children creation
      */
-    private _setProperties(button: RadioButtonComponent) {
+    private _setProperties(button: RadioButtonComponent): void {
         if (button) {
             button.name = this.name;
             button.contentDensity = this.contentDensity;
@@ -179,7 +181,7 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
     }
 
     /** Called everytime a radio button is clicked, In content child as well as viewchild */
-    private _selectedValueChanged(button: RadioButtonComponent) {
+    private _selectedValueChanged(button: RadioButtonComponent): void {
         if (this._selected !== button) {
             if (this._selected) {
                 this._selected.unselect();
@@ -195,7 +197,7 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
      * called on button click for view radio button, created from list of values
      * @param event
      */
-    selected(event: RadioButtonComponent) {
+    public selected(event: RadioButtonComponent): void {
         this._selectedValueChanged(event);
     }
 
