@@ -58,7 +58,6 @@
             [id]="'radio4'"
             [name]="'radio4'"
             [contentDensity]="'compact'"
-            [value]="'march'"
             [isInline]="false"
             formControlName="example4"
         >
@@ -76,13 +75,7 @@
 <p>1. Inline Compact Radio Button Group With Default Selection</p>
 <fdp-form-group [multiLayout]="true">
     <fdp-form-field [id]="'radio4'" zone="zLeft" rank="1">
-        <fdp-radio-group
-            [name]="'radio4'"
-            [value]="'summer'"
-            [contentDensity]="'compact'"
-            [isInline]="true"
-            [(ngModel)]="favoriteSeason"
-        >
+        <fdp-radio-group [name]="'radio4'" [contentDensity]="'compact'" [isInline]="true" [(ngModel)]="favoriteSeason">
             <fdp-radio-button [value]="'winter'">Winter</fdp-radio-button>
             <fdp-radio-button [value]="'spring'">Spring</fdp-radio-button>
             <fdp-radio-button [value]="'summer'">Summer</fdp-radio-button>
@@ -112,7 +105,6 @@
             [id]="'radio5'"
             [name]="'radio5'"
             [contentDensity]="'compact'"
-            [value]="'march'"
             [isInline]="false"
             [(ngModel)]="favoriteMonth"
         >

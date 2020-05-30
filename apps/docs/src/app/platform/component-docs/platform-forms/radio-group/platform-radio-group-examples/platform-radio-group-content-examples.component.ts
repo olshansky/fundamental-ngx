@@ -1,5 +1,5 @@
 import { Component, DoCheck } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validator, Validators } from '@angular/forms';
 
 @Component({
     selector: 'fdp-platform-radio-group-content-example',
@@ -25,7 +25,7 @@ export class PlatformRadioGroupContentExampleComponent implements DoCheck {
     });
 
     form4 = new FormGroup({
-        example4: new FormControl({ value: '', disabled: false })
+        example4: new FormControl({ value: '', disabled: false }, Validators.required)
     });
 
     ngDoCheck() {
