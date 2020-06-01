@@ -18,6 +18,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { RadioButtonComponent } from './radio/radio.component';
 import { CollectionBaseInput } from '../collection-base.input';
+import { FormFieldControl } from '../form-control';
 
 // Increasing integer for generating unique ids for radio components.
 let nextUniqueId = 0;
@@ -26,7 +27,8 @@ let nextUniqueId = 0;
     selector: 'fdp-radio-group',
     templateUrl: './radio-group.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    providers: [{ provide: FormFieldControl, useExisting: RadioGroupComponent, multi: true }]
 })
 export class RadioGroupComponent extends CollectionBaseInput implements AfterViewInit {
     /** value of selected radio button */
