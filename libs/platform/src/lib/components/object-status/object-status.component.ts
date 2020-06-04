@@ -41,4 +41,8 @@ export class ObjectStatusComponent {
     @Input()
     large: boolean = false;
 
+    /** Sets control aria-label attribute value */
+    @Input()
+    ariaLabel: string = null;
+
 }
