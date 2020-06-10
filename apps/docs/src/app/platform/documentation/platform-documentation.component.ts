@@ -20,6 +20,7 @@ export class PlatformDocumentationComponent extends DocumentationBaseComponent {
             { url: 'platform/button', name: 'Button' },
             { url: 'platform/checkbox', name: 'Checkbox' },
             { url: 'platform/info-label', name: 'Info Label' },
+            { url: 'platform/input', name: 'Input' },
             { url: 'platform/link', name: 'Link' },
             { url: 'platform/menu', name: 'Menu' },
             { url: 'platform/menu-button', name: 'Menu Button' },

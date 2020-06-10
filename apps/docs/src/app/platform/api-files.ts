@@ -9,6 +9,7 @@ export const API_FILES = {
     button: ['ButtonComponent'],
     checkbox: ['CheckboxComponent'],
     infoLabel: ['InfoLabelComponent'],
+    input: ['InputComponent'],
     link: ['LinkComponent'],
     menu: ['MenuComponent', 'MenuItemComponent', 'MenuTriggerDirective'],
     menuButton: ['MenuButtonComponent'],
