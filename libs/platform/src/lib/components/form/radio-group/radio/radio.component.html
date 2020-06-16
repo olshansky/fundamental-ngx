@@ -1,15 +1,20 @@
 <ng-template #renderer>
-    <fd-radio-button
-        [id]="id"
-        [name]="name"
-        [value]="value"
-        [state]="state"
-        [compact]="contentDensity === 'compact'"
-        [disabled]="disabled"
-        (click)="onClick($event)"
-    >
-        <ng-content></ng-content>
-    </fd-radio-button>
+    <div fd-form-item [attr.role]="'radio'">
+        <fd-radio-button
+            [id]="id"
+            [name]="name"
+            [value]="value"
+            [state]="state"
+            [compact]="contentDensity === 'compact'"
+            [disabled]="disabled"
+            [attr.aria-checked]="false"
+            [attr.tabindex]="0"
+            (click)="onClick($event)"
+            (keydown)="onKeyDown($event)"
+        >
+            <ng-content></ng-content>
+        </fd-radio-button>
+    </div>
 </ng-template>
 
 <ng-container *ngIf="forceRender">
