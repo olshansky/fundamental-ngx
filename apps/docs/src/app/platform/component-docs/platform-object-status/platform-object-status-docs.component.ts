@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ExampleFile } from '../../../documentation/core-helpers/code-example/example-file';
 
 import * as PlatformObjectStatusDefaultExample from '!raw-loader!./platform-object-status-example/platform-object-status-example.component.html';
@@ -11,16 +11,15 @@ import * as PlatformObjectStatusInvertedGenericExample from '!raw-loader!./platf
 import * as PlatformObjectStatusLargeExample from '!raw-loader!./platform-object-status-example/platform-object-status-large-example.component.html';
 
 @Component({
-  selector: 'fdp-platform-object-status-docs',
-  templateUrl: './platform-object-status-docs.component.html'
+    selector: 'fdp-platform-object-status-docs',
+    templateUrl: './platform-object-status-docs.component.html'
 })
 export class PlatformObjectStatusDocsComponent {
-
     platformDefaultObjectStatusHtmlType: ExampleFile[] = [
         {
             language: 'html',
             code: PlatformObjectStatusDefaultExample,
-            fileName: 'platform-info-label-example',
+            fileName: 'platform-object-status-example'
         }
     ];
 
@@ -79,5 +78,4 @@ export class PlatformObjectStatusDocsComponent {
             fileName: 'platform-object-status-large-example'
         }
     ];
-
 }

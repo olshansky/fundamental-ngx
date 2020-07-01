@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'fdp-platform-object-status-example',
@@ -60,6 +60,6 @@ export class PlatformObjectStatusInvertedGenericTextExampleComponent {}
 })
 export class PlatformObjectStatusLargeExampleComponent {
     showAlert() {
-        alert('clicked alert large at index:- ');
+        alert('clicked alert large');
     }
 }

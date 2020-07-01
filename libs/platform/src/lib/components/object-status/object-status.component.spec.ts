@@ -8,12 +8,14 @@ import { By } from '@angular/platform-browser';
 @Component({
     selector: 'fdp-test-numeric-info-label',
     template: `<fdp-object-status
-	  [status]="status" 
-      [glyph]="glyph" 
-      [indicationColor]="indicationColor" 
-      [clickable]="clickable" 
-      [inverted]="inverted" 
-      [large]="large">Info Label</fdp-object-status>`
+        [status]="status"
+        [glyph]="glyph"
+        [indicationColor]="indicationColor"
+        [clickable]="clickable"
+        [inverted]="inverted"
+        [large]="large"
+        >Info Label</fdp-object-status
+    >`
 })
 class TestPlatformObjectStatusComponent {
     @ViewChild(ObjectStatusComponent, { static: true }) component: ObjectStatusComponent;
@@ -57,7 +59,7 @@ describe('ObjectStatusComponent', () => {
         expect(linkElement.nativeElement.classList.contains('fd-object-status--negative')).toBe(true);
         expect(linkElement.nativeElement.classList.contains('sap-icon--status-negative')).toBe(true);
         host.status = 'positive';
-        host.glyph = 'status-positive'
+        host.glyph = 'status-positive';
         fixture.detectChanges();
         linkElement = fixture.debugElement.query(By.css('span'));
         expect(linkElement.nativeElement.classList.contains('fd-object-status--positive')).toBe(true);
@@ -86,4 +88,3 @@ describe('ObjectStatusComponent', () => {
         expect(linkElement.nativeElement.classList.contains('fd-object-status--large')).toBe(true);
     });
 });
-

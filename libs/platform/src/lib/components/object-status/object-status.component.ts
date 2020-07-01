@@ -1,13 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ObjectStatus } from '@fundamental-ngx/core';
 
 @Component({
-  selector: 'fdp-object-status',
-  templateUrl: './object-status.component.html'
+    selector: 'fdp-object-status',
+    templateUrl: './object-status.component.html'
 })
 export class ObjectStatusComponent {
-
-
     /**
      * The status represented by the Object Status.
      * Can be one of the following: 'negative' | 'critical' | 'positive' | 'informative'
@@ -44,5 +42,4 @@ export class ObjectStatusComponent {
     /** Sets control aria-label attribute value */
     @Input()
     ariaLabel: string = null;
-
 }
