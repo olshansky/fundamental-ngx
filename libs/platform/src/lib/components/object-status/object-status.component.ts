@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { ObjectStatus } from '@fundamental-ngx/core';
 
+export type IndicationColorType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+
 @Component({
     selector: 'fdp-object-status',
     templateUrl: './object-status.component.html'
@@ -25,7 +27,7 @@ export class ObjectStatusComponent {
      * Option includes numbers from 1 to 8
      */
     @Input()
-    indicationColor: number = null;
+    indicationColor: IndicationColorType;
 
     /** Whether the Object Status is clickable. */
     @Input()
