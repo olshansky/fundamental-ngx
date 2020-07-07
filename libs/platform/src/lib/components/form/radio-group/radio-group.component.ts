@@ -1,28 +1,30 @@
-import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component } from '@angular/core';
-import { ContentChildren, EventEmitter, Input, Output, Optional } from '@angular/core';
-import { QueryList, Self, ViewChildren, ViewEncapsulation } from '@angular/core';
+import {
+    EventEmitter,
+    Component,
+    ContentChildren,
+    QueryList,
+    Input,
+    ChangeDetectorRef,
+    ChangeDetectionStrategy,
+    AfterViewInit,
+    Output,
+    Self,
+    Optional,
+    ViewChildren
+} from '@angular/core';
 import { NgControl, NgForm } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { RadioButtonComponent, PlatformRadioChange } from './radio/radio.component';
+import { RadioButtonComponent } from './radio/radio.component';
 import { CollectionBaseInput } from '../collection-base.input';
-import { FormFieldControl } from '../form-control';
 
-const keyCode = Object.freeze({
-    RETURN: 13,
-    SPACE: 32,
-    LEFT: 37,
-    UP: 38,
-    RIGHT: 39,
-    DOWN: 40
-});
+// Increasing integer for generating unique ids for radio components.
+let nextUniqueId = 0;
 
 @Component({
     selector: 'fdp-radio-group',
     templateUrl: './radio-group.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None,
-    providers: [{ provide: FormFieldControl, useExisting: RadioGroupComponent, multi: true }]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RadioGroupComponent extends CollectionBaseInput implements AfterViewInit {
     /** value of selected radio button */
@@ -75,29 +77,20 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
         @Optional() @Self() public ngForm: NgForm
     ) {
         super(_changeDetector, ngControl, ngForm);
-    }
-
-    /**
-     * controlvalue accessor
-     */
-    writeValue(value: any): void {
-        if (value) {
-            this._value = value;
-            this.onChange(value);
-        }
+        this.id = `radio-group-${nextUniqueId++}`;
     }
 
     /**
      * @hidden selecting default button as provided as input
      */
     ngAfterContentChecked(): void {
-        if (!this._validateRadioButtons()) {
+        if (!this.validateRadioButtons()) {
             throw new Error('fdp-radio-button-group must contain a fdp-radio-button');
         }
 
         if (this.contentRadioButtons && this.contentRadioButtons.length > 0) {
             this.contentRadioButtons.forEach((button) => {
-                this._selectUnselect(button);
+                this.selectUnselect(button);
                 this._changeDetector.detectChanges();
             });
         }
@@ -107,7 +100,7 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
      * Initialize properties once fd-radio-buttons are available.
      * This allows us to propagate relevant attributes to associated buttons.
      */
-    ngAfterViewInit(): void {
+    ngAfterViewInit() {
         setTimeout(() => {
             this._initContentRadioButtons();
             this._initViewRadioButtons();
@@ -115,78 +108,9 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
     }
 
     /**
-     * called on button click for view radio button, created from list of values
-     * @param radio
-     */
-    public selected(radioChange: PlatformRadioChange): void {
-        this._selectedValueChanged(radioChange.radio);
-    }
-
-    /**
-     * handling onkeydown event
-     * @param PlatformRadioChange contains radio and event
-     */
-    public onKeydownEvent(radioChange: PlatformRadioChange): void {
-        let flag = false;
-        let targetRadioButton: RadioButtonComponent;
-        const event: KeyboardEvent = <KeyboardEvent>radioChange.event;
-        if (!event) {
-            return;
-        }
-        switch (event.keyCode) {
-            case keyCode.SPACE:
-            case keyCode.RETURN:
-                this._selectedValueChanged(radioChange.radio);
-                flag = true;
-                break;
-
-            case keyCode.UP:
-                targetRadioButton = this._getRequiredRadioButton(-1);
-                this._selectedValueChanged(targetRadioButton);
-                flag = true;
-                break;
-
-            case keyCode.DOWN:
-                targetRadioButton = this._getRequiredRadioButton(1);
-                this._selectedValueChanged(targetRadioButton);
-                flag = true;
-                break;
-
-            case keyCode.LEFT:
-                targetRadioButton = this._getRequiredRadioButton(-1);
-                this._selectedValueChanged(targetRadioButton);
-                flag = true;
-                break;
-
-            case keyCode.RIGHT:
-                targetRadioButton = this._getRequiredRadioButton(1);
-                this._selectedValueChanged(targetRadioButton);
-                flag = true;
-                break;
-
-            default:
-                break;
-        }
-
-        if (flag) {
-            event.stopPropagation();
-            event.preventDefault();
-        }
-    }
-
-    /**
-     * unsubscribe events.
-     * @hidden
-     */
-    public ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
-    }
-
-    /**
      * Make sure we have expected childs.
      */
-    private _validateRadioButtons(): boolean {
+    private validateRadioButtons(): boolean {
         return (
             this.contentRadioButtons.filter((item) => !(item instanceof RadioButtonComponent || item['renderer']))
                 .length === 0
@@ -194,13 +118,13 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
     }
 
     /**
-     * selects radio button with provided value
+     * select radio button with provided value
      */
-    private _initViewRadioButtons(): void {
+    private _initViewRadioButtons() {
         if (this.viewRadioButtons && this.viewRadioButtons.length > 0) {
             this.viewRadioButtons.forEach((button) => {
                 button.status = this.status;
-                this._selectUnselect(button);
+                this.selectUnselect(button);
                 this.onChange(this._value);
             });
         }
@@ -210,23 +134,22 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
      * Initializing all content radio buttons with given properties and
      * subscribing to radio button radiobuttonclicked event
      */
-    private _initContentRadioButtons(): void {
+    private _initContentRadioButtons() {
         if (this.contentRadioButtons && this.contentRadioButtons.length > 0) {
             this.contentRadioButtons.forEach((button) => {
                 this._setProperties(button);
-                this._selectUnselect(button);
+                this.selectUnselect(button);
                 this.onChange(this._value);
-                button.keydown.pipe(takeUntil(this.destroy$)).subscribe((value) => this.onKeydownEvent(value));
-                button.click.pipe(takeUntil(this.destroy$)).subscribe((ev) => this.selected(ev));
+                button.click.pipe(takeUntil(this.destroy$)).subscribe((ev) => this._selectedValueChanged(ev));
             });
         }
     }
 
     /**
-     * selects given radio button, if value matches
-     * @param Radio button
+     * selects given button, if value matches
+     * @param button
      */
-    private _selectUnselect(button: RadioButtonComponent): void {
+    private selectUnselect(button: RadioButtonComponent) {
         if (!this._value) {
             button.unselect();
         } else {
@@ -243,10 +166,10 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
     }
 
     /**
-     * set inital values, used while content children creation
-     * @param button
+     *
+     * @param button set inital values, used while content children creation
      */
-    private _setProperties(button: RadioButtonComponent): void {
+    private _setProperties(button: RadioButtonComponent) {
         if (button) {
             button.name = this.name;
             button.contentDensity = this.contentDensity;
@@ -256,64 +179,41 @@ export class RadioGroupComponent extends CollectionBaseInput implements AfterVie
     }
 
     /** Called everytime a radio button is clicked, In content child as well as viewchild */
-    private _selectedValueChanged(button: RadioButtonComponent): void {
-        if (button) {
-            if (this._selected !== button) {
-                if (this._selected) {
-                    this._selected.unselect();
-                }
-                this._selected = button;
-                this._selected.select();
+    private _selectedValueChanged(button: RadioButtonComponent) {
+        if (this._selected !== button) {
+            if (this._selected) {
+                this._selected.unselect();
             }
-            this._value = button.value;
-            // used while selection of radio on keyboard event
-            button.focus();
-            this.change.emit(button);
-            this.onChange(this._value);
+            this._selected = button;
+        }
+        this._value = button.value;
+        this.change.emit(button);
+        this.onChange(this._value);
+    }
+
+    /**
+     * called on button click for view radio button, created from list of values
+     * @param event
+     */
+    selected(event: RadioButtonComponent) {
+        this._selectedValueChanged(event);
+    }
+
+    /**
+     * controlvalue accessor
+     */
+    writeValue(value: any): void {
+        if (value) {
+            this._value = value;
+            this.onChange(value);
         }
     }
 
     /**
-     * Returns next radio button to be selected on keyboard event.
-     * @param nextPosition, position of next radio button from current position.
-     * + 1 for -> key right and key down. - 1 for -> key left and key up.
+     * @hidden
      */
-    private _getRequiredRadioButton(nextPosition: number): RadioButtonComponent {
-        let calculatedPosition: number;
-        const radioButtons: RadioButtonComponent[] = this._displayedRadios();
-        calculatedPosition = this._calculateNextPosition(nextPosition);
-        return radioButtons[calculatedPosition];
-    }
-
-    /**
-     * returns available radio buttons in group.
-     */
-    private _displayedRadios(): RadioButtonComponent[] {
-        let radioButtons: RadioButtonComponent[];
-        if (this.contentRadioButtons && this.contentRadioButtons.length > 0) {
-            radioButtons = this.contentRadioButtons.toArray();
-        } else {
-            radioButtons = this.viewRadioButtons.toArray();
-        }
-        return radioButtons;
-    }
-
-    /**
-     * returns next available radio buttons.
-     * Need to skip disabled radio buttons.
-     * @param delta -1 | 1
-     */
-    private _calculateNextPosition(delta: number): number {
-        const radioButtons = this._displayedRadios();
-        const activeItemIndex = radioButtons.indexOf(this._selected);
-        let index: number = -1;
-        for (let i = 1; i <= radioButtons.length; i++) {
-            index = (activeItemIndex + delta * i + radioButtons.length) % radioButtons.length;
-            // skip disabled radios in position calculation.
-            if (!radioButtons[index].disabled) {
-                break;
-            }
-        }
-        return index;
+    public ngOnDestroy(): void {
+        this.destroy$.next(true);
+        this.destroy$.complete();
     }
 }

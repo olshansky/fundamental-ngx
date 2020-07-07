@@ -35,4 +35,4 @@ import { PlatformTextAreaModule } from './components/form/text-area/text-area.mo
         PlatformTextAreaModule
     ]
 })
-export class FundamentalNgxPlatformModule {}
+export class FundamentalNgxPlatformModule { }
