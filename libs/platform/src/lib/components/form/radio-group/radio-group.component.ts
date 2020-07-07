@@ -1,15 +1,16 @@
 import {
-    EventEmitter,
-    Component,
-    ContentChildren,
-    QueryList,
-    Input,
+    AfterViewInit,
     ChangeDetectorRef,
     ChangeDetectionStrategy,
-    AfterViewInit,
-    Output,
-    Self,
+    Component,
+    ContentChildren,
+    EventEmitter,
+    Input,
     Optional,
+    Output,
+    QueryList,
+    Self,
+    ViewEncapsulation,
     ViewChildren
 } from '@angular/core';
 import { NgControl, NgForm } from '@angular/forms';
@@ -17,6 +18,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { RadioButtonComponent } from './radio/radio.component';
 import { CollectionBaseInput } from '../collection-base.input';
+import { FormFieldControl } from '../form-control';
 
 // Increasing integer for generating unique ids for radio components.
 let nextUniqueId = 0;
@@ -24,7 +26,9 @@ let nextUniqueId = 0;
 @Component({
     selector: 'fdp-radio-group',
     templateUrl: './radio-group.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None,
+    providers: [{ provide: FormFieldControl, useExisting: RadioGroupComponent, multi: true }]
 })
 export class RadioGroupComponent extends CollectionBaseInput implements AfterViewInit {
     /** value of selected radio button */
