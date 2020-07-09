@@ -6,7 +6,7 @@
         [label]="label"
         [tristate]="tristate"
         [tristateSelectable]="tristateSelectable"
-        [state]="status"
+        [state]="status||state"
         [compact]="contentDensity === 'compact'"
         [ngModel]="checkboxCurrentValue"
         (ngModelChange)="onModelChange()"

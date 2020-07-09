@@ -98,23 +98,6 @@ export class CheckboxGroupComponent extends CollectionBaseInput {
      * @param event: contains checkbox and event in a PlatformCheckboxChange class object.
      */
     public groupValueChanges(event: PlatformCheckboxChange): void {
-        if (this.ngControl.invalid && this.ngControl.touched) {
-            if (this.viewCheckboxes && this.viewCheckboxes.length > 0) {
-                this.viewCheckboxes.forEach((checkbox) => {
-                    checkbox.ngControl?.control.setErrors(this.ngControl.errors);
-                    checkbox._status = this.status;
-                    checkbox.detectChanges();
-                });
-            }
-            if (this.contentCheckboxes && this.contentCheckboxes.length > 0) {
-                this.contentCheckboxes.forEach((checkbox) => {
-                    checkbox.ngControl?.control.setErrors(this.ngControl.errors);
-                    checkbox._status = this.status;
-                    checkbox.detectChanges();
-                });
-            }
-        }
-
         this.onTouched();
         this.groupValueChange.emit(event);
     }
