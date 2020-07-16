@@ -78,6 +78,12 @@ export class TimePickerComponent implements ControlValueAccessor, OnInit {
     @Input()
     displayHours: boolean = true;
 
+    /** @Input Default time picker placeholder which is set dependant on the hours, minutes and seconds. 
+     * Otherwise It can be set to a default value
+    */
+    @Input()
+    placeholder: string = this.getPlaceholder();
+
     /** Whether to perform visual validation on the picker input. */
     @Input()
     validate: boolean = true;
@@ -124,16 +130,12 @@ export class TimePickerComponent implements ControlValueAccessor, OnInit {
     isOpen: boolean;
 
     /** @hidden */
-    placeholder: string;
-
-    /** @hidden */
     onChange: Function = () => {};
     /** @hidden */
     onTouched: Function = () => {};
 
     /** @hidden */
     ngOnInit(): void {
-        this.placeholder = this.getPlaceholder();
     }
 
     /**
