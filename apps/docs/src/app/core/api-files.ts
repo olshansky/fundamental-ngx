@@ -49,6 +49,7 @@ export const API_FILES = {
         'FormSetDirective',
         'FormInputMessageGroupComponent'
     ],
+    formMessage: ['FormInputMessageGroupComponent'],
     icon: ['IconComponent'],
     identifier: ['IdentifierComponent'],
     image: ['ImageComponent'],

@@ -89,6 +89,11 @@ export const ROUTES: Routes = [
                     import('./component-docs/file-input/file-input-docs.module').then((m) => m.FileInputDocsModule)
             },
             {
+                path: 'form-message',
+                loadChildren: () =>
+                    import('./component-docs/form-message/form-message-docs.module').then((m) => m.FormMessageDocsModule)
+            },
+            {
                 path: 'icon',
                 loadChildren: () => import('./component-docs/icon/icon-docs.module').then((m) => m.IconDocsModule)
             },
