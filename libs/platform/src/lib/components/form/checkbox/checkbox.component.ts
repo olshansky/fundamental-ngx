@@ -9,8 +9,11 @@ import { FormFieldControl, Status } from '../form-control';
 export class PlatformCheckboxChange {
     /** The source Checkbox of the event. */
     source: CheckboxComponent;
-    /** The new `checked` value of the checkbox. */
-    checked: boolean;
+    /**
+     * The new `checked` value of the checkbox.
+     * possible value: true/false and array of checkbox values.
+     */
+    checked: any;
 }
 
 /**
@@ -78,17 +81,9 @@ export class CheckboxComponent extends BaseInput implements AfterViewInit {
         }
     }
 
-    /** set status value from CBG */
+    /** set state of individual checkbox.Used by CBG to set checkbox states */
     @Input()
-    get state(): Status {
-        return this._state;
-    }
-
-    set state(newStatus: Status) {
-        this._state = newStatus;
-        this._status = newStatus;
-        this._changeDetector.markForCheck();
-    }
+    stateType: Status;
 
     /** Emitting checked event for non-form checkbox  */
     @Output()
@@ -190,6 +185,16 @@ export class CheckboxComponent extends BaseInput implements AfterViewInit {
         this._updateModel();
         this.onTouched();
         this.stateChanges.next('checkbox: onModelChange');
+    }
+
+    /**
+     * returns the state for checkbox.
+     */
+    public getUpdatedState(): string {
+        if (this.stateType) {
+            return this.stateType as string;
+        }
+        return this.status as string; // return parent form field status.
     }
 
     /** @hidden running outside angular zone */
